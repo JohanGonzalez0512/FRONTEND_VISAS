@@ -1,0 +1,67 @@
+.login-page {
+    height: 100vh;
+    width: 100vw;
+    background: rgb(0, 95, 255);
+    background: linear-gradient(328deg, rgba(0, 95, 255, 1) 0%, rgba(16, 152, 212, 1) 100%);
+    display: grid;
+    place-items: center;
+}
+
+.login-card {
+    background-color: $color-white;
+    width: clamp(45rem, 45rem, 90%);
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: center;
+    justify-content: space-between;
+    border-radius: .5rem;
+    box-shadow: .5rem .5rem 1.5rem rgba(0, 0, 0, 0.08), -.5rem -.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    min-height: 60rem;
+    max-width: 90%;
+
+    &__logo {
+        height: 35%;
+        padding: 2rem;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+
+        & img {
+            max-width: 80%;
+            object-fit: cover;
+        }
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+
+        & .inputs {
+            width: 100%;
+            margin-bottom: 10rem;
+
+            & input {
+                width: 100%;
+                display: block;
+                background-color: $color-primary-ligth;
+                border: none;
+                outline: none;
+                border-radius: .5rem;
+                padding: 2rem 1.5rem;
+
+                &:first-of-type {
+                    margin-bottom: 1rem;
+                }
+
+            }
+        }
+
+        & button {
+            width: 100%;
+        }
+    }
+}
