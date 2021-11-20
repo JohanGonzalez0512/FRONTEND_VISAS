@@ -22,14 +22,14 @@ export const paymentReducer = (state = initialState, action) => {
         case types.payLoadClientsName:
             return {
                 ...state,
-                clientsName:[...action.payload]
+                clientsName: [...action.payload]
             }
         case types.paySetActivePayment:
             return {
                 ...state,
                 activePayment: action.payload
             }
-     
+
 
         case types.paySetTotalExpenses:
             return {
@@ -100,7 +100,7 @@ export const paymentReducer = (state = initialState, action) => {
                 ...state,
                 paymentsWithExpenses: state.paymentsWithExpenses.filter(
                     expenses => (expenses.id_expense !== state.activePayment.id_expense)),
-                activeExpense: null
+                activePayment: null
             }
 
         case types.paycleaning:

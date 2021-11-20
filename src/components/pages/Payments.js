@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { paymentsStartLoading, setActivePayment } from "../../actions/payments";
+import { paymentsStartLoading, setActivePayment, startPaymentDelete } from "../../actions/payments";
 import IconList from "../IconList"
 
 export default function Payments({  }) {
@@ -18,7 +18,7 @@ export default function Payments({  }) {
 
     const handleDelete = (payment) => {
         dispatch(setActivePayment(payment))
-        // dispatch()
+        dispatch(startPaymentDelete())
     }
     const handleEdit = (payment) => {
         dispatch(setActivePayment(payment))

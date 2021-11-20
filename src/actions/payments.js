@@ -30,7 +30,7 @@ export const paymentsStartLoading = (monthAndYear) => {
             dispatch(paymentsLoaded(payments));
 
         } catch (error) {
-            console.log(error)
+            Swal.fire('Error', 'Hablar con el administrador', 'error')
         }
 
     }
@@ -122,8 +122,8 @@ export const startUpdatingIncomeAndExpense = (payment) => {
             let { activePayment } = getState().payment
 
             if (activePayment.type === 'Pago') {
-              
-                const {id_income} = activePayment
+
+                const { id_income } = activePayment
 
                 const res = await fetchConToken(`pagos/${id_income}`, payment, 'PUT')
                 const body = await res.json();
@@ -149,7 +149,7 @@ export const startUpdatingIncomeAndExpense = (payment) => {
                     })
                 }
             } else {
-                const {id_expense} = activePayment
+                const { id_expense } = activePayment
                 const res = await fetchConToken(`gastos/${id_expense}`, payment, 'PUT')
                 const body = await res.json();
                 if (body.ok) {
@@ -183,87 +183,117 @@ export const startUpdatingIncomeAndExpense = (payment) => {
     }
 }
 
-// export const startClientDelete = () => {
-//     return async (dispatch, getState) => {
-//         try {
-//             const { activeClient } = getState().passport
-//             const res = await fetchConToken(`clientes/${activeClient.id_client}`, {}, 'DELETE')
-//             const body = await res.json();
-//             if (body.ok) {
-//                 dispatch(clientDeleted())
-//                 Swal.fire({
-//                     title: '¡Genial!',
-//                     text: body.msg,
-//                     icon: 'success',
-//                 })
-//             }
-//             else {
-//                 console.log(body.msg)
-//                 Swal.fire({
-//                     title: '¡Oops!',
-//                     text: body.msg,
-//                     icon: 'question',
-//                 })
-//             }
-//         } catch (error) {
-//             console.log(error)
-//             Swal.fire('Error', 'Hablar con el administrador', 'error')
+export const startPaymentDelete = () => {
+    return async (dispatch, getState) => {
+        try {
+            let { activePayment } = getState().payment
+            if (activePayment.type === 'Pago') {
 
-//         }
-//     }
-// }
+                const { id_income } = activePayment
 
-const payLoadClientsName = (names) => ({
-    type: types.payLoadClientsName,
-    payload: names
-})
+                const res = await fetchConToken(`pagos/${id_income}`,{}, 'DELETE')
+                const body = await res.json();
+                if (body.ok) {
 
+                    dispatch(paymentDeleted())
+                    Swal.fire({
+                        title: '¡Genial!',
+                        text: body.msg,
+                        icon: 'success',
+                    })
+                }
+                else {
+                    console.log(body.msg)
+                    Swal.fire({
+                        title: '¡Oops!',
+                        text: body.msg,
+                        icon: 'question',
+                    })
+                }
+            } else {
+                const { id_expense } = activePayment
+                const res = await fetchConToken(`gastos/${id_expense}`, {}, 'DELETE')
+                const body = await res.json();
+                if (body.ok) {
 
-export const setActivePayment = (income) => ({
-    type: types.paySetActivePayment,
-    payload: income
-})
+                    dispatch(expenseDeleted())
+                    Swal.fire({
+                        title: '¡Genial!',
+                        text: body.msg,
+                        icon: 'success',
+                    })
+                }
+                else {
+                    console.log(body.msg)
+                    Swal.fire({
+                        title: '¡Oops!',
+                        text: body.msg,
+                        icon: 'question',
+                    })
+                }
 
-const addNewIncome = (income) => ({
-    type: types.payAddNewIncome,
-    payload: income
-})
-const addNewExpense = (expense) => ({
-    type: types.payAddNewExpense,
-    payload: expense
-})
-
-const incomeUpdated = (income) => ({
-    type: types.payUpdatedIncome,
-    payload: income
-});
-
-const expenseUpdated = (expense) => ({
-    type: types.payUpdatedExpense,
-    payload: expense
-});
-
-const setTotalIncomesWithExpenses = (total) => ({
-    type: types.paySetTotalExpensesWithIncomes,
-    payload: total
-})
-const setTotalIncomes = (total) => ({
-    type: types.paySetTotalIncomes,
-    payload: total
-})
-const setTotalExpenses = (total) => ({
-    type: types.paySetTotalExpenses,
-    payload: total
-})
+            }
 
 
-const paymentsLoaded = (payments) => ({
-    type: types.payLoadPayments,
-    payload: payments
-})
+        } catch (error){
+            console.log(error)
+            Swal.fire('Error', 'Hablar con el administrador', 'error')
 
-export const paymentsLogout = () => ({ type: types.paycleaning })
+        }
+    }
+}
 
-export const paymentDeleted = () => ({ type: types.payDeletedIncome });
+    const payLoadClientsName = (names) => ({
+        type: types.payLoadClientsName,
+        payload: names
+    })
 
-export const expenseDeleted = () => ({ type: types.payDeletedExpense });
+
+    export const setActivePayment = (income) => ({
+        type: types.paySetActivePayment,
+        payload: income
+    })
+
+    const addNewIncome = (income) => ({
+        type: types.payAddNewIncome,
+        payload: income
+    })
+    const addNewExpense = (expense) => ({
+        type: types.payAddNewExpense,
+        payload: expense
+    })
+
+    const incomeUpdated = (income) => ({
+        type: types.payUpdatedIncome,
+        payload: income
+    });
+
+    const expenseUpdated = (expense) => ({
+        type: types.payUpdatedExpense,
+        payload: expense
+    });
+
+    const setTotalIncomesWithExpenses = (total) => ({
+        type: types.paySetTotalExpensesWithIncomes,
+        payload: total
+    })
+    const setTotalIncomes = (total) => ({
+        type: types.paySetTotalIncomes,
+        payload: total
+    })
+    const setTotalExpenses = (total) => ({
+        type: types.paySetTotalExpenses,
+        payload: total
+    })
+
+
+    const paymentsLoaded = (payments) => ({
+        type: types.payLoadPayments,
+        payload: payments
+    })
+
+    export const paymentsLogout = () => ({ type: types.paycleaning })
+
+    export const expenseDeleted = () => ({ type: types.payDeletedExpense })
+    export const paymentDeleted = () => ({ type: types.payDeletedIncome });
+    
