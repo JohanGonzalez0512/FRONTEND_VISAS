@@ -18,7 +18,7 @@ export const clientsStartLoading = () => {
             dispatch(clientsLoaded(clients));
 
         } catch (error) {
-            console.log(error)
+            Swal.fire('Error',  'Hablar con el administrador', 'error')
         }
 
     }

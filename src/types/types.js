@@ -35,4 +35,19 @@ export const types = {
     payDeletedExpense: '[payment] delete an expense',
 
 
+
+    tripsLoadingTrips: '[trips] Load trips',
+    tripsAddNewTrip: '[trips] create a trip',
+    tripsUpdatedTrip: '[trips] update a trip',
+    tripsDeletedTrip: '[trips] delete a trip',
+    tripsSetActiveTrip: '[trips] set active a trip',
+
+    tripsLoadingClients: '[trips] Load clients',
+    tripsAddNewClient: '[trips] create a client',
+    tripsUpdatedClient: '[trips] update a client',
+    tripsDeletedClient: '[trips] delete a client',
+    tripsSetActiveClient: '[trips] set active a client',
+    tripsLogout: '[trips] trips logout'
+
+
 }
