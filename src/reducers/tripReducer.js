@@ -74,14 +74,15 @@ export const tripReducer = (state = initialState, action) => {
             return {
                 ...state,
                 trips: state.trips.filter(
-                    trips => (trips.id_trip !== state.trips.id_trip)),
+                    trips => (trips.id_trip !== state.activeTrip.id_trip)),
                 activeTrip: null
             }
+
         case types.tripsDeletedClient:
             return {
                 ...state,
                 clients: state.clients.filter(
-                    clients => (clients.id_client !== state.clients.id_client)),
+                    clients => (clients.id_client !== state.activeClient.id_client)),
                 activeClient: null
             }
         case types.tripsLogout:

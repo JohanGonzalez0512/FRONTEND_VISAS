@@ -104,7 +104,7 @@ export const startLoadingCLientNames = () => {
     return async (dispatch) => {
         const res = await fetchConToken('clientes')
         let body = await res.json();
-        console.log(body)
+      
         const names = body.clients.map(client => {
             const { name, id_client } = client;
             return {

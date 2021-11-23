@@ -1,14 +1,21 @@
+import { useDispatch } from "react-redux";
+import { tripStartCreation } from "../../actions/trips";
 import { useForm } from "../../hooks/useForm"
 
 export default function CreateTrip() {
     const initialState = {
         date: '',
-        limit: ''
+        limit_people: ''
     }
 
-    const [formValues, handleInputChange] = useForm(initialState);
+    const [formValues, handleInputChange, reset] = useForm(initialState);
 
-    const { date, limit } = formValues;
+    const { date, limit_people } = formValues;
+    const dispatch = useDispatch();
+    const handleSubmit = () => {
+        dispatch(tripStartCreation({ ...formValues }))
+        reset();
+    }
 
     return (
         <div className="container">
@@ -32,14 +39,14 @@ export default function CreateTrip() {
                     </div>
                     <div className="col">
                         <div className="card__form__item">
-                            <label htmlFor="limit">
+                            <label htmlFor="limit_people">
                                 Límite de personas
                             </label>
                             <input
-                                name='limit'
-                                value={limit}
+                                name='limit_people'
+                                value={limit_people}
                                 onInput={handleInputChange}
-                                type="text" />
+                                type="number" />
                         </div>
                     </div>
 
@@ -47,8 +54,9 @@ export default function CreateTrip() {
 
                 <div className="buttons">
                     <button
-                        className="btn">
-                        Crear
+                        className="btn"
+                        onClick={handleSubmit}>
+                        Crear Viaje
                     </button>
                 </div>
             </div>

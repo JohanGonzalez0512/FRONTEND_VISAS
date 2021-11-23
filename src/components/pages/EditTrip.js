@@ -1,19 +1,25 @@
-import { useParams } from "react-router";
+import { useDispatch } from "react-redux";
+import { startUpdatingTrip } from "../../actions/trips";
 import { useForm } from "../../hooks/useForm"
 
 export default function EditTrip() {
 
-    const { id } = useParams();
     // iniciar con info del cliente
 
     const initialState = {
         date: '',
-        limit: ''
+        limit_people: ''
     }
 
-    const [formValues, handleInputChange] = useForm(initialState);
+    const [formValues, handleInputChange, reset] = useForm(initialState);
 
-    const { date, limit } = formValues;
+    const { date, limit_people } = formValues;
+    const dispatch = useDispatch();
+    const handleSubmit = () => {
+        
+        dispatch(startUpdatingTrip({...formValues}))
+        reset();
+    }
 
     return (
         <div className="container">
@@ -32,19 +38,19 @@ export default function EditTrip() {
                                 name='date'
                                 value={date}
                                 onInput={handleInputChange}
-                                type="text" />
+                                type="date" />
                         </div>
                     </div>
                     <div className="col">
                         <div className="card__form__item">
-                            <label htmlFor="limit">
+                            <label htmlFor="limit_people">
                                 Límite de personas
                             </label>
                             <input
-                                name='limit'
-                                value={limit}
+                                name='limit_people'
+                                value={limit_people}
                                 onInput={handleInputChange}
-                                type="text" />
+                                type="number" />
                         </div>
                     </div>
 
@@ -52,8 +58,9 @@ export default function EditTrip() {
 
                 <div className="buttons">
                     <button
-                        className="btn">
-                        Crear
+                        className="btn"
+                        onClick={handleSubmit}>
+                       Editar Viaje
                     </button>
                 </div>
             </div>

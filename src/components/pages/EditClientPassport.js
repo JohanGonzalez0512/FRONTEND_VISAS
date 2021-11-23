@@ -141,7 +141,7 @@ export default function EditClientPassport() {
                        <DocumentList  documents={documents} document={document} setDocument={setDocument} />
                        <label style={{
                            marginTop: "3rem"
-                       }}><input type="checkbox" checked={checkValue}onChange={handleChange}  />
+                       }}><input type="checkbox" checked={checkValue} onChange={handleChange}  />
                             Pasaporte vencido
                         </label>
                         

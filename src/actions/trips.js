@@ -1,94 +1,146 @@
 import { fetchConToken } from "../helpers/fetch"
 import { types } from "../types/types";
 import Swal from 'sweetalert2'
-import { prepareClientsPassport } from "../helpers/prepareClientsPassport";
+import { prepareClientsVisa } from "../helpers/prepareClientsVisa";
 
 
-// export const clientsStartLoading = () => {
-//     return async (dispatch) => {
+export const clientsStartLoading = (date) => {
+    return async (dispatch) => {
+       
 
-//         try {
+        try {
 
-//             const resp = await fetchConToken('clientes/pasaporte');
-//             const body = await resp.json()
+            const resp = await fetchConToken(`clientes/visa-fecha/${date}`);
+           
+            const body = await resp.json()
+            
+            if (body.ok) {
+                const {trip} = body
+                console.log(trip)
+                dispatch(setTripActive(trip))
+                const clients = prepareClientsVisa(body.clients);
+    
+    
+                dispatch(clientsLoaded(clients));
 
-//             const clients = prepareClientsPassport(body.clients);
-
-//             dispatch(clientsLoaded(clients));
-
-//         } catch (error) {
-//             console.log(error)
-//         }
-
-//     }
-// }
-
-
-// export const clientStartCreation = (client) => {
-//     return async (dispatch) => {
-//         try {
-
-//             const res = await fetchConToken('clientes/pasaporte', client, 'POST')
-//             const body = await res.json();
-//             if (body.ok) {
-
-//                 dispatch(addNewClient(client))
-//                 Swal.fire({
-//                     title: '¡Genial!',
-//                     text: body.msg,
-//                     icon: 'success',
-//                 })
-//             }
-//             else {
-//                 console.log(body.msg)
-//                 Swal.fire({
-//                     title: '¡Oops!',
-//                     text: body.msg,
-//                     icon: 'question',
-//                 })
-//             }
-//         } catch (error) {
-
-//             Swal.fire('Error',  'Hablar con el administrador', 'error')
-//         }
-//     }
-// }
+            }
+            else{
+                console.log(body.msg)
+                Swal.fire({
+                    title: '¡Oops!',
+                    text: body.msg,
+                    icon: 'question',
+                })
+            }
 
 
-// export const startUpdatingClient = (client) => {
-//     return async (dispatch, getState) => {
-//         try {
-//             const { activeClient } = getState().passport
-//             const res = await fetchConToken(`clientes/pasaporte/${activeClient.id_client}`, client, 'PUT')
-//             const body = await res.json();
-//             if (body.ok) {
-//                dispatch(clientUpdated({
-//                    id_client:client.id_client,
-//                    name: client.name,
-//                    address: client.address,
-//                    phone_number: client.phone_number,
-//                    date_expiration : client.date_expiration
-//                }))      
-//                 Swal.fire({
-//                     title: '¡Genial!',
-//                     text: body.msg,
-//                     icon: 'success',
-//                 })
-//             }
-//             else {
-//                 console.log(body.msg)
-//                 Swal.fire({
-//                     title: '¡Oops!',
-//                     text: body.msg,
-//                     icon: 'question',
-//                 })
-//             }
-//         } catch (error) {
-//             console.log(error)
-//             Swal.fire('Error',  'Hablar con el administrador', 'error')
-//         }
-//     }
-// }
+        } catch (error) {
+            console.log(error)
+            Swal.fire('Error', 'Hablar con el administrador', 'error')
+        }
+
+    }
+}
+
+
+export const clientStartCreation = (client) => {
+    return async (dispatch) => {
+        try {
+           
+
+            const res = await fetchConToken('clientes/visa', client, 'POST')
+            const body = await res.json();
+            if (body.ok) {
+
+                dispatch(addNewClient(client))
+                Swal.fire({
+                    title: '¡Genial!',
+                    text: body.msg,
+                    icon: 'success',
+                })
+            }
+            else {
+               
+                Swal.fire({
+                    title: '¡Oops!',
+                    text: body.msg,
+                    icon: 'question',
+                })
+            }
+        } catch (error) {
+
+            Swal.fire('Error',  'Hablar con el administrador', 'error')
+        }
+    }
+}
+
+
+export const startUpdatingClient = (client) => {
+    return async (dispatch, getState) => {
+        try {
+            const { activeClient } = getState().trip
+            console.log(client)
+            const res = await fetchConToken(`clientes/visa/${activeClient.id_client}`, client, 'PUT')
+            const body = await res.json();
+            if (body.ok) {
+               dispatch(clientUpdated({
+                   id_client:client.id_client,
+                   name: client.name,
+                   address: client.address,
+                   phone_number: client.phone_number,
+                   date_expiration : client.date_expiration,
+                   accepted: client.accepted
+               }))      
+                Swal.fire({
+                    title: '¡Genial!',
+                    text: body.msg,
+                    icon: 'success',
+                })
+            }
+            else {
+                console.log(body.msg)
+                Swal.fire({
+                    title: '¡Oops!',
+                    text: body.msg,
+                    icon: 'question',
+                })
+            }
+        } catch (error) {
+            console.log(error)
+            Swal.fire('Error',  'Hablar con el administrador', 'error')
+        }
+    }
+}
+
+
+export const startClientDelete = () => {
+    return async (dispatch, getState) => {
+        try {
+            const { activeClient } = getState().trip
+            const res = await fetchConToken(`clientes/${activeClient.id_client}`, {}, 'DELETE')
+            const body = await res.json();
+            if (body.ok) {
+                dispatch(clientDeleted())
+                Swal.fire({
+                    title: '¡Genial!',
+                    text: body.msg,
+                    icon: 'success',
+                })
+            }
+            else {
+                Swal.fire({
+                    title: '¡Oops!',
+                    text: body.msg,
+                    icon: 'question',
+                })
+            }
+        } catch (error) {
+            console.log(error)
+            Swal.fire('Error', 'Hablar con el administrador', 'error')
+
+        }
+    }
+}
 
 export const tripsStartLoading = () => {
     return async (dispatch) => {
@@ -98,12 +150,20 @@ export const tripsStartLoading = () => {
             const resp = await fetchConToken('viajes');
             const body = await resp.json()
 
-            const clients = prepareClientsPassport(body.clients);
+            // const trips = prepareClientsPassport(body.clients);
 
-            dispatch(tripsLoaded(clients));
+            dispatch(tripsLoaded(body.trips.map(trip => {
+                return {
+
+                    id_trip: trip.id_trip,
+                    date: trip.date,
+                    limit_people: trip.limit_people
+                }
+
+            })));
 
         } catch (error) {
-            Swal.fire('Error',  'Hablar con el administrador', 'error')
+            Swal.fire('Error', 'Hablar con el administrador', 'error')
         }
 
     }
@@ -134,7 +194,7 @@ export const tripStartCreation = (trip) => {
             }
         } catch (error) {
 
-            Swal.fire('Error',  'Hablar con el administrador', 'error')
+            Swal.fire('Error', 'Hablar con el administrador', 'error')
         }
     }
 }
@@ -147,14 +207,8 @@ export const startUpdatingTrip = (trip) => {
             const res = await fetchConToken(`viajes/${activeTrip.id_trip}`, trip, 'PUT')
             const body = await res.json();
             if (body.ok) {
-                
-            //    dispatch(clientUpdated({
-            //        id_client:client.id_client,
-            //        name: client.name,
-            //        address: client.address,
-            //        phone_number: client.phone_number,
-            //        date_expiration : client.date_expiration
-            //    }))      
+
+                dispatch(tripUpdated(trip))
                 Swal.fire({
                     title: '¡Genial!',
                     text: body.msg,
@@ -171,24 +225,19 @@ export const startUpdatingTrip = (trip) => {
             }
         } catch (error) {
             console.log(error)
-            Swal.fire('Error',  'Hablar con el administrador', 'error')
+            Swal.fire('Error', 'Hablar con el administrador', 'error')
         }
     }
 }
 
-
-
-
-
-
-export const startClientDelete = () => {
+export const startTripDelete = () => {
     return async (dispatch, getState) => {
         try {
-            const { activeClient } = getState().passport
-            const res = await fetchConToken(`clientes/${activeClient.id_client}`, {}, 'DELETE')
+            const { activeTrip } = getState().trip
+            const res = await fetchConToken(`viajes/${activeTrip.id_trip}`, {}, 'DELETE')
             const body = await res.json();
             if (body.ok) {
-               dispatch(clientDeleted())     
+                dispatch(tripDeleted())
                 Swal.fire({
                     title: '¡Genial!',
                     text: body.msg,
@@ -205,11 +254,18 @@ export const startClientDelete = () => {
             }
         } catch (error) {
             console.log(error)
-            Swal.fire('Error',  'Hablar con el administrador', 'error')
-            
+            Swal.fire('Error', 'Hablar con el administrador', 'error')
+
         }
     }
 }
+
+
+
+
+
+
+
 
 
 export const setClientActive = (client) => ({
@@ -255,4 +311,4 @@ const tripsLoaded = (trips) => ({
 export const clientDeleted = () => ({ type: types.tripsDeletedClient });
 export const tripDeleted = () => ({ type: types.tripsDeletedTrip });
 
-export const tripLogout = () => ({ type: types.tripsLogout})
+export const tripLogout = () => ({ type: types.tripsLogout })

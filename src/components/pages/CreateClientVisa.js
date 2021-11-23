@@ -1,18 +1,29 @@
+import { useDispatch, useSelector } from "react-redux";
+import { clientStartCreation } from "../../actions/trips";
 import { useForm } from "../../hooks/useForm"
 
 export default function CreateClientVisa() {
 
     const initialState = {
         name: '',
-        lastName: '',
+        last_name: '',
         address: '',
-        birthDate: '',
-        phoneNumber: ''
+        birthday: '',
+        phone_number: ''
     }
 
-    const [formValues, handleInputChange] = useForm(initialState);
+    const dispatch = useDispatch();
+    const {activeTrip} = useSelector(state => state.trip)
+    const {id_trip} = activeTrip;
+    const [formValues, handleInputChange, reset] = useForm(initialState);
 
-    const { name, lastName, address, birthDate, phoneNumber } = formValues;
+    const { name, last_name, address, birthday, phone_number } = formValues;
+
+    const handleSubmit = () => {
+        dispatch(clientStartCreation({...formValues,id_trip}))
+        reset();
+      
+    }
 
     return (
         <div className="container">
@@ -38,8 +49,8 @@ export default function CreateClientVisa() {
                                 Apellidos
                             </label>
                             <input
-                                name='lastName'
-                                value={lastName}
+                                name='last_name'
+                                value={last_name}
                                 onInput={handleInputChange}
                                 type="text" />
                         </div>
@@ -58,8 +69,8 @@ export default function CreateClientVisa() {
                                 Fecha de nacimiento
                             </label>
                             <input
-                                name='birthDate'
-                                value={birthDate}
+                                name='birthday'
+                                value={birthday}
                                 onInput={handleInputChange}
                                 type="date" />
                         </div>
@@ -68,8 +79,8 @@ export default function CreateClientVisa() {
                                 Número de teléfono
                             </label>
                             <input
-                                name='phoneNumber'
-                                value={phoneNumber}
+                                name='phone_number'
+                                value={phone_number}
                                 onInput={handleInputChange}
                                 type="text" />
                         </div>
@@ -79,7 +90,8 @@ export default function CreateClientVisa() {
 
                 <div className="buttons">
                     <button
-                        className="btn">
+                        className="btn"
+                        onClick={handleSubmit}>
                         Crear Cliente
                     </button>
                 </div>

@@ -1,5 +1,6 @@
 
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { startLogin } from '../../actions/auth';
 import logo from '../../helpers/resources/images/logo.png';
 import { useForm } from '../../hooks/useForm';
@@ -8,15 +9,13 @@ export default function Login() {
     const initialForm = {
         email: 'jopi20101@gmail.com',
         password: 'jopigonzalez'
-        
     }
     const [formValues, handleInputChange] = useForm(initialForm)
-    const {email, password} =formValues
+    const { email, password } = formValues
     const dispatch = useDispatch()
-    const handleLogin = ( e ) => {
+    const handleLogin = (e) => {
         e.preventDefault();
-        
-         dispatch(startLogin(email, password))
+        dispatch(startLogin(email, password))
     }
 
     return (
@@ -25,23 +24,33 @@ export default function Login() {
                 <div className="login-card__logo">
                     <img src={logo} alt="" className="logo" />
                 </div>
-                <form className="login-card__form" onSubmit= {handleLogin}>
+                <form className="login-card__form" onSubmit={handleLogin}>
                     <div className="inputs">
-                        <input 
-                            placeholder="Correo electrónico" 
-                            type="text" 
-                            name="email" 
+                        <input
+                            placeholder="Correo electrónico"
+                            type="text"
+                            name="email"
                             value={email}
                             onChange={handleInputChange}
                         />
-                        <input 
-                            placeholder="Contraseña" 
-                            type="password" 
-                            name="password" 
+                        <input
+                            placeholder="Contraseña"
+                            type="password"
+                            name="password"
                             id="pwd"
                             value={password}
-                            onChange={handleInputChange} 
+                            onChange={handleInputChange}
+                            style={
+                                {
+                                    marginBottom:'1rem'
+                                }}
                         />
+                    <Link to='/auth/forgot-password'
+                    >
+                    
+                    <a>¿Restablecer contraseña?</a>
+                    
+                    </Link >
                     </div>
                     <button type="submit" className="btn">
                         Iniciar sesión

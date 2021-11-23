@@ -1,38 +1,32 @@
+import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import { clientsStartLoading, setClientActive, startClientDelete } from "../../actions/trips"
 import IconList from "../IconList"
 
 export default function Trips() {
 
-    const data = [
-        {
-            _id: 1,
-            name: 'Johan Israel',
-            phoneNumber: '6181234567',
-            address: 'Huizache 1',
-            status: 'aceptado'
-        },
-        {
-            _id: 2,
-            name: 'Rick Sánchez',
-            phoneNumber: '6181234567',
-            address: 'Huizache 1',
-            status: 'aceptado'
-        },
-        {
-            _id: 3,
-            name: 'Ángel Cruz',
-            phoneNumber: '6181234567',
-            address: 'Huizache 1',
-            status: 'aceptado'
-        },
-        {
-            _id: 4,
-            name: 'Eduardo Retana',
-            phoneNumber: '6181234567',
-            address: 'Huizache 1',
-            status: 'aceptado'
-        }
-    ]
+
+    
+    const { activeTrip, clients } = useSelector(state => state.trip)
+    const dispatch = useDispatch();
+    const handleChangeDispatch = (date) => {
+        dispatch(clientsStartLoading(date))
+    }
+    // useEffect(() => {
+
+    //     dispatch(paymentsStartLoading());
+
+    // }, [dispatch])
+
+    const handleDelete = (client) => {
+        dispatch(setClientActive(client))
+        dispatch(startClientDelete())
+    }
+
+    const handleEdit = (client) => {
+        dispatch(setClientActive(client))
+        // dispatch()
+    }
 
     return (
         <div className="container">
@@ -42,26 +36,34 @@ export default function Trips() {
                 </h1>
 
                 <IconList
-                    data={data}
-                    headers={['Nombre', 'Número', 'Dirección', 'Status']}
+                    data={clients}
+                    headers={['Nombre', 'Número', 'Dirección','Fecha de expiracion', 'Status']}
                     deleteLink="./borrar/"
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
                     editLink="/clientes/editar-client-visa"
-                    idPropName='_id'
+                    idPropName='id_client'
                     filterProp="name"
+                    handleChangeFunction={handleChangeDispatch}
                     searchInputType="text"
                     searchInputLabel="Filtrar por nombre"
                     searchInputType2="date"
                     searchInputLabel2="Buscar viaje por fecha"
                 />
+                {
+                    (activeTrip) && (
 
-                <div className="buttons">
-                    <Link
-                        to='/clientes/crear-cliente-visa'
-                        // onClick={} --> aquí vas a poner tu función para cambiar el [data] que le mandas al IconList
-                        className="btn">
-                        Añadir clientes al viaje
-                    </Link>
-                </div>
+                        <div className="buttons">
+
+                            <Link
+                                to='/clientes/crear-cliente-visa'
+                                // onClick={} --> aquí vas a poner tu función para cambiar el [data] que le mandas al IconList
+                                className="btn">
+                                Añadir cliente a un viaje
+                            </Link>
+                        </div>
+                    )
+                }
             </div>
 
 

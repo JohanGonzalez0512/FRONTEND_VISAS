@@ -1,27 +1,30 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { setTripActive, tripsStartLoading, startTripDelete } from "../../actions/trips";
 import IconList from "../IconList"
 
 export default function TripsHistory() {
 
-    const data = [
-        {
-            _id: 1,
-            date: '06/11/2021',
-            dispId: 1,
-            limit: 40,
-        },
-        {
-            _id: 2,
-            date: '03/11/2021',
-            dispId: 2,
-            limit: 40,
-        },
-        {
-            _id: 3,
-            date: '22/11/2021',
-            dispId: 3,
-            limit: 40,
-        },
-    ]
+
+
+    const dispatch = useDispatch();
+    const { trips } = useSelector(state => state.trip)
+    
+    useEffect(() => {
+
+        dispatch(tripsStartLoading());
+
+    }, [dispatch])
+
+    const handleDelete = (trip) => {
+
+        dispatch(setTripActive(trip))
+        dispatch(startTripDelete(trip))
+    }
+
+    const handleEdit = (trip) => {
+        dispatch(setTripActive(trip))
+    }
 
     return (
         <div className="container">
@@ -31,11 +34,13 @@ export default function TripsHistory() {
                 </h1>
 
                 <IconList
-                    data={data}
-                    headers={['Fecha', 'Id', 'Límite']}
+                    data={trips}
+                    headers={['Fecha', 'Límite de personas']}
                     deleteLink="./borrar/"
-                    editLink="./editar/"
-                    idPropName='_id'
+                    editLink="/editar-viaje"
+                    idPropName='id_trip'
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
                     filterProp="date"
                     searchInputType="date"
                     searchInputLabel="Filtrar por fecha"

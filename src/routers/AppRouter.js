@@ -12,7 +12,7 @@ import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
 
 export default function AppRouter() {
-    // const [isLoggedOn, setstate] = useState(initialState)
+    
     const dispatch = useDispatch()
     const { logged } = useSelector(state => state.auth);
 

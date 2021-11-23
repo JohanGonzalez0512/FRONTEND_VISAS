@@ -7,6 +7,7 @@ export default function Payments({  }) {
 
     const dispatch = useDispatch();
     const { paymentsWithExpenses, totalPaymentsWithExpenses } = useSelector(state => state.payment)
+    
     const handleChangeDispatch = (monthAndYear) => {
         dispatch(paymentsStartLoading(monthAndYear))
     }

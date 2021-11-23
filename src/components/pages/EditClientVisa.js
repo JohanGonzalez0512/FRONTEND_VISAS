@@ -1,23 +1,65 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { startUpdatingClient } from "../../actions/trips";
 import { useForm } from "../../hooks/useForm"
 
 export default function EditClientVisa() {
 
-    const { id } = useParams();
+
     // iniciar con info del cliente
 
     const initialState = {
         name: '',
-        lastName: '',
+        last_name: '',
         address: '',
-        birthDate: '',
-        phoneNumber: '',
-        expDate: ''
+        birthday: '',
+        phone_number: '',
+        date_expiration: '',
+
+
+
     }
 
-    const [formValues, handleInputChange] = useForm(initialState);
+    const [formValues, handleInputChange, reset] = useForm(initialState);
+    const initial = {
+        sheet_visa_payment: 0,
+        accepted: 0,
+        copy_passport: 0,
+        right_visa: 0,
+        picture_visa: 0
+    }
+    const { name, last_name, address, birthday, phone_number, date_expiration } = formValues;
+    const [checkValues, setCheckValues] = useState(initial)
+    const dispatch = useDispatch();
 
-    const { name, lastName, address, birthDate, phoneNumber, expDate } = formValues;
+    const { accepted, sheet_visa_payment, right_visa, copy_passport, picture_visa } = checkValues;
+
+    const handleChange = ({ target }) => {
+        setCheckValues({ ...checkValues, [target.name]: target.checked ? 1 : 0 })
+    }
+
+    const resetCheck = () => {
+        setCheckValues(
+            {
+                sheet_visa_payment: false,
+                accepted: false,
+                copy_passport: false,
+                right_visa: false,
+                picture_visa: false
+            }
+        )
+        setCheckValues(initial)
+    }
+
+    const handleSubmit = () => {
+        dispatch(startUpdatingClient({ ...formValues, ...checkValues }))
+        resetCheck();
+        reset();
+
+    }
+
+
 
     return (
         <div className="container">
@@ -43,8 +85,8 @@ export default function EditClientVisa() {
                                 Apellidos
                             </label>
                             <input
-                                name='lastName'
-                                value={lastName}
+                                name='last_name'
+                                value={last_name}
                                 onInput={handleInputChange}
                                 type="text" />
                         </div>
@@ -63,8 +105,8 @@ export default function EditClientVisa() {
                                 Fecha de nacimiento
                             </label>
                             <input
-                                name='birthDate'
-                                value={birthDate}
+                                name='birthday'
+                                value={birthday}
                                 onInput={handleInputChange}
                                 type="date" />
                         </div>
@@ -73,8 +115,8 @@ export default function EditClientVisa() {
                                 Número de teléfono
                             </label>
                             <input
-                                name='phoneNumber'
-                                value={phoneNumber}
+                                name='phone_number'
+                                value={phone_number}
                                 onInput={handleInputChange}
                                 type="text" />
                         </div>
@@ -83,26 +125,26 @@ export default function EditClientVisa() {
                                 Fecha de expiración
                             </label>
                             <input
-                                name='expDate'
-                                value={expDate}
+                                name='date_expiration'
+                                value={date_expiration}
                                 onInput={handleInputChange}
                                 type="date" />
                         </div>
                     </div>
                     <div className="col">
-                        <label><input type="checkbox" id="accepted" value="accepted" />
+                        <label><input type="checkbox" checked={accepted} name="accepted" onChange={handleChange} />
                             Aceptado
                         </label>
-                        <label><input type="checkbox" id="visa" value="visa" />
+                        <label><input type="checkbox" checked={sheet_visa_payment} name="sheet_visa_payment" onChange={handleChange} />
                             Pago de visa
                         </label>
-                        <label><input type="checkbox" id="passport" value="passport" />
+                        <label><input type="checkbox" name="copy_passport" checked={copy_passport} onChange={handleChange} />
                             Copia de pasaporte
                         </label>
-                        <label><input type="checkbox" id="visa-pic" value="visa-pic" />
+                        <label><input type="checkbox" checked={picture_visa} name="picture_visa" onChange={handleChange} />
                             Fotos para visa
                         </label>
-                        <label><input type="checkbox" id="visa-right" value="visa-right" />
+                        <label><input type="checkbox" checked={right_visa} name="right_visa" onChange={handleChange} />
                             Derecho a visa
                         </label>
                     </div>
@@ -110,7 +152,8 @@ export default function EditClientVisa() {
 
                 <div className="buttons">
                     <button
-                        className="btn">
+                        className="btn"
+                        onClick={handleSubmit}>
                         Actualizar Cliente
                     </button>
                 </div>
